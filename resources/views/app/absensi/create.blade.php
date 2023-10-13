@@ -69,7 +69,7 @@
             <textarea name="keterangan" cols="30" rows="5" id="keterangan"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
                                 {{ $errors->has('keterangan') ? 'border-red-500' : '' }}"
-                placeholder="Masukkan keterangan jika ada" required></textarea>
+                placeholder="Masukkan keterangan jika ada"></textarea>
         </div>
 
         <div class="mb-6">
