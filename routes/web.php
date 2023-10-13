@@ -24,6 +24,10 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
     Route::get('/absensi', [App\Http\Controllers\App\AbsensiController::class, 'index'])->name('app.absensi.index');
     Route::get('/absensi/create', [App\Http\Controllers\App\AbsensiController::class, 'create'])->name('app.absensi.create');
     Route::post('/absensi', [App\Http\Controllers\App\AbsensiController::class, 'store'])->name('app.absensi.store');
+
+
+    Route::get('/rekap-absensi', [App\Http\Controllers\App\RekapAbsensiController::class, 'index'])->name('app.rekap-absensi.index');
+    Route::get('/rekap-absensi-per-bulan', [App\Http\Controllers\App\RekapAbsensiController::class, 'rekapPerBulan'])->name('app.rekap-absensi-per-bulan.index');
 });
 
 require __DIR__ . '/auth.php';

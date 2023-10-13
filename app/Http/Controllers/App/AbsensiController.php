@@ -17,7 +17,10 @@ class AbsensiController extends Controller
         $daftarAbsensi = DB::table('absensi')
             ->join('users', 'absensi.id_user', '=', 'users.id')
             ->select('absensi.*', 'users.*')
-            ->whereDate('tanggal', $date ? $date : date('Y-m-d'))
+            ->whereMonth('tanggal', date('m'))
+            ->whereYear('tanggal', date('Y'))
+            ->where('absensi.id_user', auth()->user()->id)
+            ->orderBy('tanggal', 'desc')
             ->get();
 
         return view('app.absensi.index', compact('daftarAbsensi'));

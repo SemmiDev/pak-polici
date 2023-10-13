@@ -1,17 +1,17 @@
 <x-admin-layout>
-    <div class="flex justify-between">
-        <h1 class="text-3xl text-black pb-6">Data Absensi</h1>
-
-        <div>
-            <a href="{{ route('app.absensi.create') }}"
-               class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-               type="button">
-                Tambah
-            </a>
-        </div>
+    <div class="flex flex-col md:flex-row justify-between">
+        <h1 class="text-3xl text-black pb-6">Rekap Data Absensi</h1>
+        <form action="{{ route('app.rekap-absensi.index') }}" method="GET"
+        id="filter-date">
+            <div class="flex">
+                <input type="date" name="date"
+                       value="{{ request()->get('date', Carbon\Carbon::now()->format('Y-m-d')) }}"
+                       id="date" class="px-4 py-2 border border-gray-300 rounded-md">
+            </div>
+        </form>
     </div>
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="relative overflow-x-auto shadow-md mt-5 sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -44,9 +44,13 @@
                     </td>
                     <th scope="row"
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                        @if($absensi->status == null)
+                            <span>Belum mengisi absensi</span>
+                        @else
                         <img src="{{ asset('storage/absensi/' . $absensi->foto) }}" alt="foto"
                              class="w-48 h-48 object-cover rounded-xl enlarge-image mx-auto"
                              data-src="{{ asset('storage/absensi/' . $absensi->foto) }}">
+                        @endif
                     </th>
 
                     <td class="px-6 py-4 text-center">
@@ -56,12 +60,19 @@
                     </td>
 
                     <td class="px-6 py-4 text-center">
-                        {{ Carbon\Carbon::parse($absensi->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y') }}
-                        <br>
-                        <b class="font-semibold">     {{ Carbon\Carbon::parse($absensi->waktu)->format('H:i') }}</b>
+                        @if($absensi->status == null)
+                            <span>Belum mengisi absensi</span>
+                        @else
+                            {{ Carbon\Carbon::parse($absensi->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y') }}
+                            <br>
+                            <b class="font-semibold">     {{ Carbon\Carbon::parse($absensi->waktu)->format('H:i') }}</b>
+                        @endif
                     </td>
 
                     <td class="px-6 py-4 text-center">
+                        @if($absensi->status == null)
+                            <span>Belum mengisi absensi</span>
+                        @else
                             <span class="px-2 py-1 font-semibold leading-tight
                                         {{ $absensi->status == 'Hadir' ? 'text-green-700 bg-green-100' : '' }}
                                         {{ $absensi->status == 'Izin' ? 'text-yellow-700 bg-yellow-100' : '' }}
@@ -70,6 +81,7 @@
                                         rounded-full">
                             {{ $absensi->status }}
                             </span>
+                        @endif
                     </td>
 
                     <td class="px-6 py-4 text-center">
@@ -89,6 +101,14 @@
     </div>
 
     <script type="text/javascript">
+
+        document.addEventListener("change", function (e) {
+            if (e.target && e.target.id == "date") {
+                const form = e.target.closest("form");
+                form.submit();
+            }
+        });
+
         document.addEventListener("change", function (e) {
             if (e.target && e.target.id == "status") {
                 const form = e.target.closest("form");
