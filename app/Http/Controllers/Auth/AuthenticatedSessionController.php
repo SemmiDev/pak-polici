@@ -25,7 +25,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $isSuccess = $request->authenticate();
+        if (!$isSuccess) {
+                    return back()->withErrors([
+                        'email' => 'Email atau password salah.'
+                    ]);
+        }
 
         $request->session()->regenerate();
 

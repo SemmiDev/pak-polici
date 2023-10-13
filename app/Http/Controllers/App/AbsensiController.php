@@ -5,6 +5,8 @@ namespace App\Http\Controllers\App;
 use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use Illuminate\Http\Request;
+use Illuminate\Queue\Failed\DatabaseFailedJobProvider;
+use Illuminate\Support\Facades\DB;
 
 class AbsensiController extends Controller
 {
@@ -12,17 +14,25 @@ class AbsensiController extends Controller
     {
         $date = $request->query('date');
 
-        if ($date) {
-            $daftarAbsensi = Absensi::whereDate('created_at', $date)->get();
-            return view('app.absensi.index', compact('daftarAbsensi'));
-        }
+        $daftarAbsensi = DB::table('absensi')
+            ->join('users', 'absensi.id_user', '=', 'users.id')
+            ->select('absensi.*', 'users.*')
+            ->whereDate('tanggal', $date ? $date : date('Y-m-d'))
+            ->get();
 
-        $daftarAbsensi = Absensi::whereDate('created_at', date('Y-m-d'))->get();
         return view('app.absensi.index', compact('daftarAbsensi'));
     }
 
     public function create()
     {
+        $absensi = Absensi::where('id_user', auth()->user()->id)
+            ->whereDate('tanggal', date('Y-m-d'))
+            ->first();
+
+        if ($absensi) {
+            return redirect()->route('app.absensi.index')->with('error', 'Anda sudah absen hari ini');
+        }
+
         $daftarStatus = [
             'Hadir',
             'Izin',
@@ -44,7 +54,7 @@ class AbsensiController extends Controller
             'lokasi' => 'required|string',
             'latitude' => 'nullable|string',
             'longitude' => 'nullable|string',
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'required|image|mimes:jpg,jpeg,png',
             'status' => 'required|string',
             'keterangan' => 'nullable|string',
         ]);

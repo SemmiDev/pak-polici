@@ -37,7 +37,7 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function authenticate(): void
+    public function authenticate()
     {
         $this->ensureIsNotRateLimited();
 
@@ -45,10 +45,12 @@ class LoginRequest extends FormRequest
         $password = $this->input('password');
 
         if (Auth::attempt(['email' => $email, 'password' => $password]) || Auth::attempt(['nip' => $email, 'password' => $password])) {
-            return;
+            return true;
         }
 
         RateLimiter::hit($this->throttleKey());
+
+        return false;
     }
 
     /**

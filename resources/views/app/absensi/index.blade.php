@@ -45,7 +45,7 @@
                         <th scope="row"
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                             <img src="{{ asset('storage/absensi/' . $absensi->foto) }}" alt="foto"
-                                class="w-48 h-48 object-cover rounded-xl enlarge-image"
+                                class="w-48 h-48 object-cover rounded-xl enlarge-image mx-auto"
                                 data-src="{{ asset('storage/absensi/' . $absensi->foto) }}">
                         </th>
 
@@ -55,11 +55,18 @@
                         </td>
 
                         <td class="px-6 py-4 text-center">
-                            {{ $absensi->tanggal->format('d M Y') }}
+                            {{ $absensi->tanggal }}
                         </td>
 
                         <td class="px-6 py-4 text-center">
+                            <span class="px-2 py-1 font-semibold leading-tight
+                                        {{ $absensi->status == 'Hadir' ? 'text-green-700 bg-green-100' : '' }}
+                                        {{ $absensi->status == 'Izin' ? 'text-yellow-700 bg-yellow-100' : '' }}
+                                        {{ $absensi->status == 'Sakit' ? 'text-red-700 bg-red-100' : '' }}
+                                        {{ $absensi->status == 'Alpa' ? 'text-gray-700 bg-gray-100' : '' }}
+                                        rounded-full">
                             {{ $absensi->status }}
+                            </span>
                         </td>
 
                         <td class="px-6 py-4 text-center">
