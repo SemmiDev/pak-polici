@@ -25,6 +25,9 @@
                     Nama
                 </th>
                 <th scope="col" class="px-6 py-3 text-center">
+                    Lokasi
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
                     Tanggal
                 </th>
                 <th scope="col" class="px-6 py-3 text-center">
@@ -57,6 +60,15 @@
                         {{ $absensi->name }}
                         <br>
                         <b class="font-semibold"> {{ $absensi->nip }}</b>
+                    </td>
+
+                    <td class="px-6 py-4 text-center">
+                        <a
+                        class="text-sky-600"
+                        href="https://www.google.com/maps/search/?api=1&query={{ $absensi->latitude }},{{ $absensi->longitude }}"
+                           target="_blank">
+                        {{ $absensi->lokasi }}
+                        </a>
                     </td>
 
                     <td class="px-6 py-4 text-center">
